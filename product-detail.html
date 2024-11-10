@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Mock data for product details with image paths
+        const products = {
+            "eco-soap": {
+                name: "Eco-friendly Soap",
+                price: 599,
+                description: "This soap is made from natural ingredients, perfect for sensitive skin.",
+                image: "soap.jpg"
+            },
+            "bamboo-toothbrush": {
+                name: "Bamboo Toothbrush",
+                price: 249,
+                description: "Eco-friendly bamboo toothbrush with soft bristles.",
+                image: "brsh.jpg"
+            },
+            "reusable-bottle": {
+                name: "Reusable Water Bottle",
+                price: 799,
+                description: "Stainless steel, reusable water bottle to reduce plastic waste.",
+                image: "bottle.jpg"
+            },
+            "bamboo-straws": {
+                name: "Bamboo Straws",
+                price: 399,
+                description: "Eco-friendly bamboo straws for a sustainable lifestyle.",
+                image: "strw.jpg"
+            },
+            "eco-bag": {
+                name: "Eco-friendly Bag",
+                price: 499,
+                description: "Reusable shopping bag made from sustainable materials.",
+                image: "bag.jpg"
+            },
+            "metal-straw": {
+                name: "Metal Straw",
+                price: 199,
+                description: "Reusable metal straws to reduce single-use plastic waste.",
+                image: "metal.jpg"
+            },
+            "organic-tea": {
+                name: "Organic Tea",
+                price: 349,
+                description: "Premium organic tea, perfect for your daily cup of goodness.",
+                image: "tea.jpg"
+            },
+            "sustainable-lunchbox": {
+                name: "Sustainable Lunchbox",
+                price: 899,
+                description: "Eco-friendly lunchbox to carry your meals in style.",
+                image: "lnch box.jpg"
+            },
+            "organic-cotton-pillow": {
+                name: "Organic Cotton Pillow",
+                price: 799,
+                description: "Soft and comfortable pillow made from organic cotton.",
+                image: "images/product9.jpg"
+            },
+            "biodegradable-phone-case": {
+                name: "Biodegradable Phone Case",
+                price: 499,
+                description: "Eco-friendly phone case made from biodegradable materials.",
+                image: "case.jpg"
+            }
+        };
+
+        // Function to load product details based on URL parameter
+        function loadProductDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productKey = urlParams.get('product');
+            const product = products[productKey];
+
+            if (product) {
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('product-price').textContent = "₹" + product.price;
+                document.getElementById('product-description').textContent = product.description;
+                document.getElementById('product-image').src = product.image;
+            } else {
+                document.getElementById('product-details').innerHTML = "<p>Product not found.</p>";
+            }
+        }
+
+        function addToCart() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productKey = urlParams.get('product');
+            const product = products[productKey];
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingProductIndex = cart.findIndex(item => item.productName === product.name);
+
+            if (existingProductIndex !== -1) {
+                cart[existingProductIndex].quantity++;
+            } else {
+                cart.push({ productName: product.name, price: product.price, quantity: 1 });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`${product.name} has been added to your cart!`);
+        }
+
+        window.onload = loadProductDetails;
+    </script>
+</head>
+<body>
+    <header style="display: flex; justify-content: space-between; align-items: center; background-color: #2ecc71; padding: 20px; color: white;">
+        <h1>EcoFriendly Marketplace</h1>
+        <!-- Update to link to cart.html -->
+        <button class="cart-button" onclick="window.location.href='cart.html'" style="background-color: transparent; border: none; font-size: 24px; color: white;">🛒 View Cart</button>
+    </header>
+
+    <section id="product-details" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+        <img id="product-image" src="" alt="Product Image" style="width: 300px; height: auto; margin-bottom: 20px;">
+        <h2 id="product-name" style="font-size: 24px; margin-bottom: 10px;"></h2>
+        <p id="product-price" style="font-size: 18px; color: #2ecc71; margin-bottom: 10px;"></p>
+        <p id="product-description" style="font-size: 16px; color: #555; margin-bottom: 20px;"></p>
+        <button onclick="addToCart()" style="background-color: #2ecc71; color: white; padding: 10px 20px; border: none; cursor: pointer; font-size: 16px; border-radius: 5px;">Add to Cart</button>
+    </section>
+</body>
+</html>

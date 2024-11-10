@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFriendly Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>EcoFriendly Marketplace</h1>
+        <div class="header-buttons">
+            <button class="cart-button" onclick="viewCart()">🛒 View Cart</button>
+            <button class="checkout-button" onclick="proceedToCheckout()">💳 Checkout</button>
+        </div>
+    </header>
+
+    <!-- Product Section -->
+    <section class="product-section">
+        <h2>Our Eco-Friendly Products</h2>
+        <div class="products">
+            <!-- Product Cards -->
+            <div class="product-card">
+                <a href="product-detail.html?product=eco-soap">
+                    <img src="soap.jpg" alt="Eco-friendly Soap">
+                    <h3>Eco-friendly Soap</h3>
+                </a>
+                <p>₹599</p>
+                <button onclick="addToCart('Eco-friendly Soap', 599)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=bamboo-toothbrush">
+                    <img src="brsh.jpg" alt="Bamboo Toothbrush">
+                    <h3>Bamboo Toothbrush</h3>
+                </a>
+                <p>₹249</p>
+                <button onclick="addToCart('Bamboo Toothbrush', 249)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=reusable-bottle">
+                    <img src="bottle.jpg" alt="Reusable Water Bottle">
+                    <h3>Reusable Water Bottle</h3>
+                </a>
+                <p>₹799</p>
+                <button onclick="addToCart('Reusable Water Bottle', 799)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=bamboo-straws">
+                    <img src="strw.jpg" alt="Bamboo Straws">
+                    <h3>Bamboo Straws</h3>
+                </a>
+                <p>₹399</p>
+                <button onclick="addToCart('Bamboo Straws', 399)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=eco-bag">
+                    <img src="bag.jpg" alt="Eco-friendly Bag">
+                    <h3>Eco-friendly Bag</h3>
+                </a>
+                <p>₹499</p>
+                <button onclick="addToCart('Eco-friendly Bag', 499)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=metal-straw">
+                    <img src="metal.jpg" alt="Metal Straw">
+                    <h3>Metal Straw</h3>
+                </a>
+                <p>₹199</p>
+                <button onclick="addToCart('Metal Straw', 199)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=organic-tea">
+                    <img src="tea.jpg" alt="Organic Tea">
+                    <h3>Organic Tea</h3>
+                </a>
+                <p>₹349</p>
+                <button onclick="addToCart('Organic Tea', 349)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=sustainable-lunchbox">
+                    <img src="lnch box.jpg" alt="Sustainable Lunchbox">
+                    <h3>Sustainable Lunchbox</h3>
+                </a>
+                <p>₹899</p>
+                <button onclick="addToCart('Sustainable Lunchbox', 899)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=organic-cotton-pillow">
+                    <img src="pillow.jpg" alt="Organic Cotton Pillow">
+                    <h3>Organic Cotton Pillow</h3>
+                </a>
+                <p>₹799</p>
+                <button onclick="addToCart('Organic Cotton Pillow', 799)">Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <a href="product-detail.html?product=biodegradable-phone-case">
+                    <img src="case.jpg" alt="Biodegradable Phone Case">
+                    <h3>Biodegradable Phone Case</h3>
+                </a>
+                <p>₹499</p>
+                <button onclick="addToCart('Biodegradable Phone Case', 499)">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function addToCart(productName, price) {
+            const existingProductIndex = cart.findIndex(item => item.productName === productName);
+
+            // If product exists, update quantity
+            if (existingProductIndex !== -1) {
+                cart[existingProductIndex].quantity++;
+            } else {
+                cart.push({ productName, price, quantity: 1 });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`${productName} has been added to your cart!`);
+        }
+
+        function proceedToCheckout() {
+            if (cart.length > 0) {
+                window.location.href = "checkout.html";
+            } else {
+                alert("Your cart is empty. Add items before checking out!");
+            }
+        }
+
+        function viewCart() {
+            window.location.href = "cart.html";
+        }
+    </script>
+</body>
+</html>

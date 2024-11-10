@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFriendly Marketplace - Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>EcoFriendly Marketplace</h1>
+        <nav>
+            <a href="products.html">Continue Shopping</a>
+        </nav>
+    </header>
+
+    <!-- Checkout Section -->
+    <section class="checkout-section">
+        <h2>Your Cart</h2>
+        <div id="cart-items"></div>
+        
+        <div class="total" id="total-price"></div>
+
+        <!-- Shipping Information Form -->
+        <h3>Shipping Information</h3>
+        <form id="checkout-form" action="#" method="post" onsubmit="completePurchase(event)">
+            <label for="address">Shipping Address</label>
+            <input type="text" id="address" name="address" required placeholder="Enter your shipping address">
+
+            <label for="payment">Payment Method</label>
+            <select id="payment" name="payment" required>
+                <option value="credit">Credit Card</option>
+                <option value="paypal">PayPal</option>
+            </select>
+
+            <button type="submit" class="btn">Complete Purchase</button>
+        </form>
+        
+        <!-- Confirmation Message -->
+        <div id="confirmation-message" class="confirmation-message"></div>
+    </section>
+
+    <script>
+        // Load cart items from localStorage
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function displayCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = ""; // Clear previous items
+
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+                document.getElementById('total-price').textContent = "";
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <p>${item.productName} - ₹${item.price}</p>
+                    <button onclick="removeItem(${index})">Remove</button>
+                `;
+                cartItemsContainer.appendChild(itemDiv);
+                total += item.price;
+            });
+
+            // Update total price
+            document.getElementById('total-price').textContent = "Total: ₹" + total;
+        }
+
+        // Remove item from cart
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Complete purchase function
+        function completePurchase(event) {
+            event.preventDefault();
+
+            if (cart.length === 0) {
+                alert("Your cart is empty. Add items before checking out!");
+                return;
+            }
+
+            const address = document.getElementById('address').value;
+            const paymentMethod = document.getElementById('payment').value;
+
+            // Display confirmation message
+            const confirmationMessage = document.getElementById('confirmation-message');
+            confirmationMessage.textContent = `Order Confirmed! Your items will be shipped to: ${address}. Payment method: ${paymentMethod}.`;
+            confirmationMessage.style.display = 'block';
+
+            // Clear cart after purchase
+            localStorage.removeItem('cart');
+            cart = [];
+            displayCart();
+        }
+
+        // Load cart items on page load
+        window.onload = displayCart;
+    </script>
+</body>
+</html>

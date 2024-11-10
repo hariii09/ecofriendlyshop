@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - EcoFriendly Marketplace</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body style=" font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+
+/* Flexbox layout */
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+height: 100vh;">
+    <header>
+        <h1>EcoFriendly Marketplace</h1>
+    </header>
+
+    <section class="cart-section">
+        <h2>Your Shopping Cart</h2>
+
+        <!-- Cart Table -->
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items-body">
+                <!-- Cart items will be dynamically inserted here -->
+            </tbody>
+        </table>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+            <div>
+                <span class="summary-label">Subtotal:</span>
+                <span id="subtotal">₹0</span>
+            </div>
+            <div>
+                <span class="summary-label">Shipping:</span>
+                <span id="shipping">Free</span>
+            </div>
+            <div>
+                <span class="summary-label">Total:</span>
+                <span id="total-price">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <script>
+        // Function to load the cart from localStorage and update the cart table
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsBody = document.getElementById('cart-items-body');
+            cartItemsBody.innerHTML = ''; // Clear the table before re-populating
+
+            let subtotal = 0;
+
+            if (cart.length === 0) {
+                cartItemsBody.innerHTML = "<tr><td colspan='5'>Your cart is empty.</td></tr>";
+            }
+
+            cart.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        
+                        <span>${item.productName}</span>
+                    </td>
+                    <td>₹${item.price}</td>
+                    <td>
+                        <input type="number" value="${item.quantity}" min="1" class="quantity-input" onchange="updateTotal(this, ${index})">
+                    </td>
+                    <td class="total-price">₹${item.price * item.quantity}</td>
+                    <td><button class="remove-btn" onclick="removeItem(${index})">Remove</button></td>
+                `;
+                cartItemsBody.appendChild(row);
+                subtotal += item.price * item.quantity;
+            });
+
+            // Update subtotal and total
+            document.getElementById('subtotal').innerText = `₹${subtotal}`;
+            document.getElementById('total-price').innerText = `₹${subtotal}`;
+        }
+
+        // Function to update total price when quantity is changed
+        function updateTotal(input, index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const quantity = input.value;
+            cart[index].quantity = quantity;
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Function to remove item from the cart
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Function to proceed to checkout
+        function proceedToCheckout() {
+            if (localStorage.getItem('cart') && JSON.parse(localStorage.getItem('cart')).length > 0) {
+                window.location.href = "checkout.html"; // Redirect to checkout page
+            } else {
+                alert("Your cart is empty. Please add some items to your cart before proceeding.");
+            }
+        }
+
+        // Load the cart when the page loads
+        window.onload = loadCart;
+    </script>
+</body>
+
+</html>
